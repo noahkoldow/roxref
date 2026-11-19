@@ -8,16 +8,6 @@ export interface PoseSource {
   stop(): void;
 }
 
-/**
- * Echte Pose-Erkennung aus dem Kamerabild. Braucht natives Code (Development-Build, nicht Expo Go).
- * TODO(dev-build): hier Vision-Camera-Frame-Processor + Pose-Modell (MediaPipe/Apple Vision) einhängen,
- * Landmarks auf `Pose` (siehe engine/types.ts JOINTS) abbilden und PoseFrames liefern.
- * Solange das fehlt, gibt diese Funktion null zurück und die App bietet den Demo-Modus an.
- */
-export function createNativePoseSource(): PoseSource | null {
-  return null;
-}
-
 /** Demo-Quelle: spielt eine sauber-werdende, dann ermüdende Bewegung ab (Pipeline-Test in Expo Go). */
 export function createDemoPoseSource(exercise: ExerciseId): PoseSource {
   let timer: ReturnType<typeof setInterval> | null = null;

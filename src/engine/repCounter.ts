@@ -13,6 +13,8 @@ export class RepCounter {
   phase: 'up' | 'down' = 'up';
   tracking = false;
   private ema: number | null = null;
+  /** Aktueller geglätteter Messwert (Grad) – zum Kalibrieren im UI anzeigen. */
+  get signal() { return this.ema; }
   private tStart = 0; private minSig = 0; private maxSig = 0;
   private extra: Record<string, number> = {};
   private lastGood = 0;

@@ -5,26 +5,42 @@ Zählt Wiederholungen und bewertet die Ausführung jeder einzelnen nach dem Hyro
 
 ## Architektur
 - `src/engine/` – reine TypeScript-Logik: Gelenkwinkel, Rep-Zustandsautomat mit Hysterese, Bewertung
-  (Tiefe, Streckung, Oberkörper, Tempo-Konsistenz, Ermüdung). Getestet: `npm test`.
-- `src/pose/PoseSource.ts` – Quelle der Körperpunkte. **Kamera-Pose ist noch nicht angeschlossen**
-  (`createNativePoseSource()` gibt `null`); der Demo-Modus spielt eine synthetische Bewegung ab.
+  (Tiefe, Streckung, Oberkörper, Tempo-Konsistenz, Ermüdung).
+- `src/pose/` – Pose-Quellen: `NativePoseCamera` (MediaPipe Pose Landmarker via `expo-mediapipe-pose`,
+  nur im Development-Build) und Demo-Quelle; `mapLandmarks` rechnet 33 Landmarks inkl. Seitenverhältnis um.
 - `src/sensors/motionCounter.ts` – Sensor-Add-on (Beschleunigung): zählt Reps, bewertet Tempo/Intensität.
-- `src/app/` – Expo Router (Tabs: Training, Verlauf; Modal: Session).
-- `web/` – alte Web-Version (Race-Plan), nur noch Archiv.
+- `src/app/` – Expo Router (Tabs: Training, Verlauf; Vollbild-Modal: Session).
 
-## Starten
+## Zwei Modi
+| | Expo Go | Development-Build (TestFlight später genauso) |
+|---|---|---|
+| Oberfläche, Verlauf | ✔ | ✔ |
+| Demo-Modus, Sensor-Add-on | ✔ | ✔ |
+| **Kamera-Pose (echte Erkennung)** | ✘ (natives Modul) | ✔ |
+
+## Tests
 ```bash
-npm install
-npx expo start      # Expo Go: Oberfläche, Demo-Modus, Sensor-Add-on, Kamera-Vorschau
-npm test            # Engine-Tests
+npm test            # Engine + Landmark-Mapping
+npm run typecheck
 ```
 
-## Nächster Schritt: echte Pose-Erkennung (Development-Build)
-Kamera-Frames → Pose-Modell → `PoseFrame` braucht nativen Code und läuft **nicht in Expo Go**:
-1. Vision-Camera-Frame-Processor + Pose-Modell (MediaPipe oder Apple Vision) einbinden.
-2. Landmarks auf `JOINTS` (`engine/types.ts`) mappen, in `createNativePoseSource()` zurückgeben.
-3. `eas build --profile development -p ios`, auf dem iPhone installieren, `npx expo start --dev-client`.
+## Kamera-Modus ausprobieren (Development-Build)
+Voraussetzung: Apple-Developer-Account, Expo-Account.
+```bash
+npm i -g eas-cli && eas login
+eas device:create                          # iPhone registrieren (einmalig)
+eas build --profile development -p ios     # ~15 Min in der Cloud, installiert per QR/Link
+npx expo start --dev-client                # App auf dem iPhone öffnen, mit dem Dev-Server verbinden
+```
+(Ohne iPhone-Registrierung: `eas build --profile development-simulator -p ios` für den Simulator – dort gibt es aber keine Kamera.)
+
+Aufstellung: iPhone ca. 2–3 m entfernt auf ~Hüfthöhe, **seitlich** zum Körper, ganzer Körper im Bild.
+Im Session-Screen wird der aktuelle Messwert (Winkel) angezeigt – damit lassen sich die Schwellen in
+`src/engine/exercises.ts` (`downBelow`, `upAbove`, Tiefen-Grenzen) am echten Körper kalibrieren.
 
 ## TestFlight
-`eas build -p ios --profile production` → `eas submit -p ios --latest`
-(Apple-Developer-Account nötig; `ios.bundleIdentifier` in `app.json` anpassen).
+```bash
+eas build -p ios --profile production
+eas submit -p ios --latest
+```
+`ios.bundleIdentifier` in `app.json` (`com.noahkoldow.roxref`) vorher anpassen.

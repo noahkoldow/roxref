@@ -18,6 +18,19 @@ Zählt Wiederholungen und bewertet die Ausführung jeder einzelnen nach dem Hyro
 | Demo-Modus, Sensor-Add-on | ✔ | ✔ |
 | **Kamera-Pose (echte Erkennung)** | ✘ (natives Modul) | ✔ |
 
+## Schnellstart: in Expo Go öffnen
+1. iPhone: **Expo Go** aus dem App Store installieren.
+2. Auf dem Rechner (Node.js 20+):
+```bash
+git clone https://github.com/noahkoldow/roxref.git && cd roxref
+git checkout claude/stoic-hypatia-ijh58v
+npm install
+npm start                # = expo start --go, zeigt einen QR-Code
+```
+3. QR-Code mit der iPhone-Kamera scannen → öffnet Roxref in Expo Go.
+Anderes WLAN / Firewall: `npm run start:tunnel`.
+In Expo Go funktionieren Oberfläche, Demo-Modus und Sensor-Add-on (nicht die Kamera-Pose, siehe unten).
+
 ## Tests
 ```bash
 npm test            # Engine + Landmark-Mapping
@@ -30,7 +43,7 @@ Voraussetzung: Apple-Developer-Account, Expo-Account.
 npm i -g eas-cli && eas login
 eas device:create                          # iPhone registrieren (einmalig)
 eas build --profile development -p ios     # ~15 Min in der Cloud, installiert per QR/Link
-npx expo start --dev-client                # App auf dem iPhone öffnen, mit dem Dev-Server verbinden
+npm run start:dev-client                   # App auf dem iPhone öffnen, mit dem Dev-Server verbinden
 ```
 (Ohne iPhone-Registrierung: `eas build --profile development-simulator -p ios` für den Simulator – dort gibt es aber keine Kamera.)
 

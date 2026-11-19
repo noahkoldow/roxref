@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>Roxref – Hyrox Race Companion</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>ROX<span>REF</span></h1>
+  <select id="division" aria-label="Division"></select>
+</header>
+
+<main>
+  <section id="tab-race" class="tab active">
+    <div class="clock" id="totalClock">00:00:00</div>
+    <div class="current" id="currentLabel">Bereit</div>
+    <div class="segclock" id="segClock">00:00</div>
+    <div class="delta" id="delta"></div>
+    <button id="mainBtn" class="big">START</button>
+    <div class="row">
+      <button id="undoBtn" class="ghost">Zurück</button>
+      <button id="resetBtn" class="ghost">Reset</button>
+    </div>
+    <ol id="splits"></ol>
+  </section>
+
+  <section id="tab-pace" class="tab">
+    <h2>Pacing-Rechner</h2>
+    <label>Zielzeit (h:mm)
+      <input id="goal" type="text" inputmode="numeric" value="1:30" placeholder="1:30">
+    </label>
+    <p class="hint">Verteilung: Laufanteil ca. 55 %, Stationen ca. 45 % – anhand typischer Finisher-Daten, anpassbar.</p>
+    <label>Laufanteil: <b id="runPctLabel">55</b> %
+      <input id="runPct" type="range" min="40" max="70" value="55">
+    </label>
+    <table id="paceTable"></table>
+  </section>
+
+  <section id="tab-std" class="tab">
+    <h2>Standards</h2>
+    <table id="stdTable"></table>
+    <p class="hint">Gewichte nach offiziellen Hyrox-Regeln (Stand Saison 24/25) – vor dem Rennen bitte im aktuellen Regelwerk gegenprüfen.</p>
+  </section>
+
+  <section id="tab-hist" class="tab">
+    <h2>Verlauf</h2>
+    <div id="history"></div>
+    <button id="clearHist" class="ghost">Verlauf löschen</button>
+  </section>
+</main>
+
+<nav>
+  <button data-tab="race" class="active">Race</button>
+  <button data-tab="pace">Pacing</button>
+  <button data-tab="std">Standards</button>
+  <button data-tab="hist">Verlauf</button>
+</nav>
+<script src="app.js"></script>
+</body>
+</html>

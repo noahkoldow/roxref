@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Roxref",
+    "slug": "roxref",
+    "scheme": "roxref",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#111111",
+    "splash": { "image": "./assets/splash-icon.png", "resizeMode": "contain", "backgroundColor": "#111111" },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.noahkoldow.roxref",
+      "buildNumber": "1",
+      "infoPlist": { "ITSAppUsesNonExemptEncryption": false }
+    }
+  }
+}

@@ -1,28 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { ExerciseId, RepResult, SessionSummary } from './engine/types';
 
-export type RaceState = { start: number; splits: number[] };
-export type HistoryEntry = { date: string; division: string; total: number; splits: number[] };
+export type SessionRecord = {
+  id: string; date: string; exercise: ExerciseId; mode: 'camera' | 'demo' | 'sensor';
+  summary: SessionSummary; reps: RepResult[];
+};
+const KEY = 'sessions';
 
-export async function loadJSON<T>(key: string, fallback: T): Promise<T> {
-  try {
-    const v = await AsyncStorage.getItem(key);
-    return v ? (JSON.parse(v) as T) : fallback;
-  } catch {
-    return fallback;
-  }
+export async function loadSessions(): Promise<SessionRecord[]> {
+  try { const v = await AsyncStorage.getItem(KEY); return v ? JSON.parse(v) : []; } catch { return []; }
 }
-export const saveJSON = (key: string, v: unknown) => AsyncStorage.setItem(key, JSON.stringify(v));
-export const removeKey = (key: string) => AsyncStorage.removeItem(key);
-
-/** useState, das in AsyncStorage persistiert. `ready` ist true, sobald geladen. */
-export function usePersisted<T>(key: string, initial: T) {
-  const [value, setValue] = useState<T>(initial);
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    loadJSON(key, initial).then((v) => { setValue(v); setReady(true); });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-  const set = (v: T) => { setValue(v); saveJSON(key, v); };
-  return [value, set, ready] as const;
+export async function addSession(r: SessionRecord) {
+  await AsyncStorage.setItem(KEY, JSON.stringify([r, ...(await loadSessions())]));
 }
+export const clearSessions = () => AsyncStorage.removeItem(KEY);

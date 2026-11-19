@@ -8,12 +8,28 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#111111",
-    "splash": { "image": "./assets/splash-icon.png", "resizeMode": "contain", "backgroundColor": "#111111" },
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#111111"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.noahkoldow.roxref",
       "buildNumber": "1",
-      "infoPlist": { "ITSAppUsesNonExemptEncryption": false }
-    }
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSMotionUsageDescription": "Roxref nutzt Bewegungssensoren, um Wiederholungen zu z\u00e4hlen."
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Roxref nutzt die Kamera, um deine Bewegungen zu erkennen und Wiederholungen zu z\u00e4hlen."
+        }
+      ]
+    ]
   }
 }
